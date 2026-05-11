@@ -1,0 +1,4 @@
+SECRET_KEY = "django-insecure-s%y1@_!oi(-1q=%x-&_*4x$0c!@6in5z=$9sg66&ai4-c7!*@!"
+DEBUG = True
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "no-reply@criscontrol.local"
