@@ -1,0 +1,222 @@
+<div class="reports">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="flex-row">
+      <div>
+        <h1>Reportes</h1>
+        <p>Analiza y exporta tu información financiera</p>
+      </div>
+      <span class="spacer"></span>
+      @if (hasResults()) {
+        <button mat-raised-button color="primary" (click)="exportExcel()" [disabled]="exporting()">
+          @if (exporting()) {
+            <mat-spinner diameter="18" />
+          } @else {
+            <mat-icon>file_download</mat-icon>
+          }
+          Exportar Excel
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Filters Card -->
+  <div class="card filters-card" [formGroup]="filterForm">
+    <h2 class="section-title">Filtros del reporte</h2>
+
+    <div class="filters-grid">
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Desde</mat-label>
+        <input matInput [matDatepicker]="pickerStart" formControlName="startDate">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerStart" />
+        <mat-datepicker #pickerStart />
+        <mat-error>Requerido</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Hasta</mat-label>
+        <input matInput [matDatepicker]="pickerEnd" formControlName="endDate">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerEnd" />
+        <mat-datepicker #pickerEnd />
+        <mat-error>Requerido</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="income">Ingresos</mat-option>
+          <mat-option value="expense">Gastos</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Categorías</mat-label>
+        <mat-select formControlName="categoryIds" multiple>
+          @for (cat of categories(); track cat.id) {
+            <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Agrupar por</mat-label>
+        <mat-select formControlName="groupBy">
+          <mat-option value="day">Día</mat-option>
+          <mat-option value="week">Semana</mat-option>
+          <mat-option value="month">Mes</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="generate()" [disabled]="loading()" class="generate-btn">
+        @if (loading()) { <mat-spinner diameter="18" /> }
+        @else { <mat-icon>analytics</mat-icon> }
+        Generar reporte
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Results -->
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="44" />
+      <p>Generando reporte...</p>
+    </div>
+  }
+
+  @if (hasResults() && !loading()) {
+
+    <!-- Summary Cards -->
+    @if (summary(); as s) {
+      <div class="summary-grid">
+        <div class="metric-card card">
+          <div class="metric-card__icon metric-card__icon--income">
+            <mat-icon>arrow_downward</mat-icon>
+          </div>
+          <div class="metric-card__body">
+            <span class="metric-card__label">Total Ingresos</span>
+            <span class="metric-card__value text-income">
+              {{ s.totalIncome | currency:'MXN':'symbol-narrow':'1.2-2' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="metric-card card">
+          <div class="metric-card__icon metric-card__icon--expense">
+            <mat-icon>arrow_upward</mat-icon>
+          </div>
+          <div class="metric-card__body">
+            <span class="metric-card__label">Total Gastos</span>
+            <span class="metric-card__value text-expense">
+              {{ s.totalExpenses | currency:'MXN':'symbol-narrow':'1.2-2' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="metric-card card">
+          <div class="metric-card__icon metric-card__icon--balance">
+            <mat-icon>account_balance</mat-icon>
+          </div>
+          <div class="metric-card__body">
+            <span class="metric-card__label">Balance Neto</span>
+            <span class="metric-card__value" [class]="balanceColor(s.balance)">
+              {{ s.balance | currency:'MXN':'symbol-narrow':'1.2-2' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="metric-card card">
+          <div class="metric-card__icon metric-card__icon--count">
+            <mat-icon>receipt_long</mat-icon>
+          </div>
+          <div class="metric-card__body">
+            <span class="metric-card__label">Nº Transacciones</span>
+            <span class="metric-card__value">{{ s.transactionCount }}</span>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Monthly Table -->
+    @if (monthlyData().length > 0) {
+      <div class="card section-card">
+        <h2 class="section-title">Evolución por período</h2>
+        <table mat-table [dataSource]="monthlyData()" class="report-table">
+
+          <ng-container matColumnDef="period">
+            <th mat-header-cell *matHeaderCellDef>Período</th>
+            <td mat-cell *matCellDef="let row">{{ row.period }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="income">
+            <th mat-header-cell *matHeaderCellDef class="cell-right">Ingresos</th>
+            <td mat-cell *matCellDef="let row" class="cell-right text-income">
+              {{ row.income | currency:'MXN':'symbol-narrow':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="expenses">
+            <th mat-header-cell *matHeaderCellDef class="cell-right">Gastos</th>
+            <td mat-cell *matCellDef="let row" class="cell-right text-expense">
+              {{ row.expenses | currency:'MXN':'symbol-narrow':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="balance">
+            <th mat-header-cell *matHeaderCellDef class="cell-right">Balance</th>
+            <td mat-cell *matCellDef="let row" class="cell-right" [class]="balanceColor(row.balance)">
+              {{ row.balance | currency:'MXN':'symbol-narrow':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="monthlyColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: monthlyColumns;"></tr>
+        </table>
+      </div>
+    }
+
+    <!-- Category Stats Table -->
+    @if (catStats().length > 0) {
+      <div class="card section-card">
+        <h2 class="section-title">Desglose por categoría</h2>
+        <table mat-table [dataSource]="catStats()" class="report-table">
+
+          <ng-container matColumnDef="category">
+            <th mat-header-cell *matHeaderCellDef>Categoría</th>
+            <td mat-cell *matCellDef="let row" class="cat-name-cell">{{ row.categoryName }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="total">
+            <th mat-header-cell *matHeaderCellDef class="cell-right">Total</th>
+            <td mat-cell *matCellDef="let row" class="cell-right font-medium">
+              {{ row.total | currency:'MXN':'symbol-narrow':'1.2-2' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="percentage">
+            <th mat-header-cell *matHeaderCellDef class="cell-right">%</th>
+            <td mat-cell *matCellDef="let row" class="cell-right">
+              <div class="pct-bar">
+                <div class="pct-bar__fill" [style.width]="row.percentage + '%'"></div>
+                <span>{{ (row.percentage / 100) | percent:'1.1-1' }}</span>
+              </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="count">
+            <th mat-header-cell *matHeaderCellDef class="cell-right">Movimientos</th>
+            <td mat-cell *matCellDef="let row" class="cell-right muted">{{ row.transactionCount }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="catColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: catColumns;"></tr>
+        </table>
+      </div>
+    }
+
+  }
+
+</div>

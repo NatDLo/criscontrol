@@ -1,0 +1,222 @@
+/* ─────────────────────────────────────────────
+   CSS Custom Properties – Finance App Design System
+───────────────────────────────────────────── */
+:root {
+  /* Brand */
+  --color-primary:       #1E3A5F;
+  --color-primary-light: #2563EB;
+  --color-primary-50:    #EFF6FF;
+
+  /* Semantic */
+  --color-success:  #10B981;
+  --color-danger:   #EF4444;
+  --color-warning:  #F59E0B;
+  --color-info:     #3B82F6;
+
+  /* Neutrals */
+  --color-bg:           #F1F5F9;
+  --color-surface:      #FFFFFF;
+  --color-surface-alt:  #F8FAFC;
+  --color-border:       #E2E8F0;
+  --color-border-dark:  #CBD5E1;
+
+  /* Text */
+  --color-text:         #0F172A;
+  --color-text-muted:   #64748B;
+  --color-text-light:   #94A3B8;
+
+  /* Sidebar */
+  --sidebar-width:      260px;
+  --sidebar-collapsed:  70px;
+  --header-height:      64px;
+
+  /* Shadows */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.10), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.10), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+
+  /* Radius */
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  16px;
+  --radius-xl:  24px;
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+  --transition-slow: 350ms ease;
+}
+
+/* ─── Reset & Base ─── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─── Scrollbar ─── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-dark);
+  border-radius: 99px;
+}
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-light); }
+
+/* ─── Angular Material overrides ─── */
+.mat-mdc-card {
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+  border: 1px solid var(--color-border);
+}
+
+.mat-mdc-raised-button.mat-primary {
+  background-color: var(--color-primary-light) !important;
+}
+
+.mat-mdc-form-field {
+  width: 100%;
+}
+
+.mat-mdc-table {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+}
+
+.mat-mdc-header-row {
+  background-color: var(--color-surface-alt) !important;
+}
+
+.mat-mdc-header-cell {
+  font-weight: 600 !important;
+  color: var(--color-text-muted) !important;
+  font-size: 12px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mat-mdc-row:hover {
+  background-color: var(--color-primary-50) !important;
+}
+
+/* ─── Snackbar custom styles ─── */
+.error-snackbar {
+  --mdc-snackbar-container-color: #FEE2E2;
+  --mdc-snackbar-supporting-text-color: #991B1B;
+  --mat-snack-bar-button-color: #991B1B;
+}
+
+.success-snackbar {
+  --mdc-snackbar-container-color: #D1FAE5;
+  --mdc-snackbar-supporting-text-color: #065F46;
+  --mat-snack-bar-button-color: #065F46;
+}
+
+/* ─── Utility classes ─── */
+.text-income  { color: var(--color-success) !important; font-weight: 600; }
+.text-expense { color: var(--color-danger)  !important; font-weight: 600; }
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &--income {
+    background-color: #D1FAE5;
+    color: #065F46;
+  }
+  &--expense {
+    background-color: #FEE2E2;
+    color: #991B1B;
+  }
+  &--neutral {
+    background-color: var(--color-surface-alt);
+    color: var(--color-text-muted);
+    border: 1px solid var(--color-border);
+  }
+}
+
+.page-header {
+  margin-bottom: 24px;
+
+  h1 {
+    margin: 0 0 4px;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-text);
+  }
+
+  p {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 14px;
+  }
+}
+
+.card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 24px;
+}
+
+.flex-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.spacer { flex: 1; }
+
+/* ─── Dialog global ─── */
+.mat-mdc-dialog-container {
+  --mdc-dialog-container-shape: var(--radius-lg) !important;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px;
+  border-bottom: 1px solid var(--color-border);
+
+  h2 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+}
+
+.dialog-body {
+  padding: 24px;
+}
+
+.dialog-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  padding: 16px 24px;
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-surface-alt);
+}

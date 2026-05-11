@@ -1,0 +1,23 @@
+<div class="summary-card" [ngClass]="'summary-card--' + variant">
+  <div class="summary-card__header">
+    <span class="summary-card__label">{{ label }}</span>
+    <div class="summary-card__icon-wrap">
+      <mat-icon>{{ icon }}</mat-icon>
+    </div>
+  </div>
+
+  <div class="summary-card__value">
+    @if (isCurrency) {
+      {{ value | currency:'MXN':'symbol-narrow':'1.2-2' }}
+    } @else {
+      {{ value }}
+    }
+  </div>
+
+  @if (trend !== undefined) {
+    <div class="summary-card__trend" [class.trend--up]="trend >= 0" [class.trend--down]="trend < 0">
+      <mat-icon>{{ trend >= 0 ? 'trending_up' : 'trending_down' }}</mat-icon>
+      <span>{{ (trend >= 0 ? '+' : '') + trend.toFixed(1) }}% vs mes anterior</span>
+    </div>
+  }
+</div>

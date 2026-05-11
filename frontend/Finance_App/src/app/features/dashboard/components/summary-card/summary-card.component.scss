@@ -1,0 +1,101 @@
+.summary-card {
+  background: var(--color-surface);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-sm);
+  padding: 20px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__icon-wrap {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  &__value {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+
+  &__trend {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 500;
+
+    mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+    }
+
+    &.trend--up   { color: var(--color-success); }
+    &.trend--down { color: var(--color-danger); }
+  }
+
+  /* Variants */
+  &--balance {
+    .summary-card__icon-wrap {
+      background: #EFF6FF;
+      mat-icon { color: var(--color-primary-light); }
+    }
+  }
+
+  &--income {
+    .summary-card__icon-wrap {
+      background: #D1FAE5;
+      mat-icon { color: var(--color-success); }
+    }
+    .summary-card__value { color: var(--color-success); }
+  }
+
+  &--expense {
+    .summary-card__icon-wrap {
+      background: #FEE2E2;
+      mat-icon { color: var(--color-danger); }
+    }
+    .summary-card__value { color: var(--color-danger); }
+  }
+
+  &--count {
+    .summary-card__icon-wrap {
+      background: #FEF3C7;
+      mat-icon { color: var(--color-warning); }
+    }
+  }
+}

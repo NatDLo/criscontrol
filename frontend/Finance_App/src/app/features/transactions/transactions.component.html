@@ -1,0 +1,88 @@
+<div class="transactions">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="flex-row">
+      <div>
+        <h1>Transacciones</h1>
+        <p>Gestiona tus ingresos y gastos</p>
+      </div>
+      <span class="spacer"></span>
+      <button mat-stroked-button (click)="exportExcel()" class="export-btn">
+        <mat-icon>download</mat-icon>
+        Exportar Excel
+      </button>
+      <button mat-raised-button color="primary" (click)="openForm()">
+        <mat-icon>add</mat-icon>
+        Nueva transacción
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="card filters-card" [formGroup]="filterForm">
+    <div class="filters-grid">
+
+      <!-- Type filter -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Tipo</mat-label>
+        <mat-select formControlName="type">
+          <mat-option value="all">Todos</mat-option>
+          <mat-option value="income">Ingresos</mat-option>
+          <mat-option value="expense">Gastos</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Category filter -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Categoría</mat-label>
+        <mat-select formControlName="categoryId">
+          <mat-option value="">Todas</mat-option>
+          @for (cat of categories(); track cat.id) {
+            <mat-option [value]="cat.id">{{ cat.name }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <!-- Date range -->
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Desde</mat-label>
+        <input matInput [matDatepicker]="pickerStart" formControlName="startDate">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerStart" />
+        <mat-datepicker #pickerStart />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Hasta</mat-label>
+        <input matInput [matDatepicker]="pickerEnd" formControlName="endDate">
+        <mat-datepicker-toggle matIconSuffix [for]="pickerEnd" />
+        <mat-datepicker #pickerEnd />
+      </mat-form-field>
+
+      <!-- Clear -->
+      <button mat-button (click)="clearFilters()" class="clear-btn">
+        <mat-icon>filter_alt_off</mat-icon>
+        Limpiar
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Results count -->
+  <div class="results-bar">
+    <span class="results-count">
+      {{ total() }} transacción{{ total() !== 1 ? 'es' : '' }} encontrada{{ total() !== 1 ? 's' : '' }}
+    </span>
+  </div>
+
+  <!-- Table -->
+  <app-transaction-list
+    [transactions]="transactions()"
+    [total]="total()"
+    [loading]="loading()"
+    (edit)="openForm($event)"
+    (delete)="confirmDelete($event)"
+    (pageChange)="onPageChange($event)"
+  />
+
+</div>

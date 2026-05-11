@@ -1,0 +1,70 @@
+<header class="header">
+  <!-- Left: toggle + breadcrumb -->
+  <div class="header__left">
+    <button
+      mat-icon-button
+      class="header__menu-btn"
+      (click)="toggle()"
+      matTooltip="Toggle menú"
+    >
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <div class="header__divider"></div>
+
+    <div class="header__brand">
+      <mat-icon class="header__brand-icon">account_balance_wallet</mat-icon>
+      <span class="header__brand-label">FinanceApp</span>
+    </div>
+  </div>
+
+  <!-- Right: actions -->
+  <div class="header__right">
+
+    <button mat-icon-button matTooltip="Notificaciones">
+      <mat-icon>notifications_none</mat-icon>
+    </button>
+
+    <!-- User menu -->
+    <button mat-icon-button [matMenuTriggerFor]="userMenu" class="header__avatar-btn">
+      <div class="header__avatar">
+        <mat-icon>person</mat-icon>
+      </div>
+    </button>
+
+    <mat-menu #userMenu="matMenu" xPosition="before">
+      <div class="user-menu-header">
+        <div class="user-menu-header__avatar">
+          <mat-icon>person</mat-icon>
+        </div>
+        <div class="user-menu-header__info">
+          <span class="user-menu-header__name">
+            {{ authService.currentUser()?.name ?? 'Usuario' }}
+          </span>
+          <span class="user-menu-header__email">
+            {{ authService.currentUser()?.email ?? '' }}
+          </span>
+        </div>
+      </div>
+
+      <mat-divider />
+
+      <button mat-menu-item>
+        <mat-icon>manage_accounts</mat-icon>
+        Mi perfil
+      </button>
+
+      <button mat-menu-item>
+        <mat-icon>settings</mat-icon>
+        Configuración
+      </button>
+
+      <mat-divider />
+
+      <button mat-menu-item (click)="logout()" class="menu-item--danger">
+        <mat-icon>logout</mat-icon>
+        Cerrar sesión
+      </button>
+    </mat-menu>
+  </div>
+</header>

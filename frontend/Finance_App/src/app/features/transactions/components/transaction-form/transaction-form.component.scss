@@ -1,0 +1,73 @@
+.form-section {
+  margin-bottom: 20px;
+}
+
+.form-label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Type radio */
+.type-radio {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  &__option {
+    border: 1.5px solid var(--color-border);
+    border-radius: var(--radius-sm);
+    padding: 4px 12px 4px 4px;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+
+    &--selected.income-selected  { border-color: var(--color-success); background: #F0FDF4; }
+    &--selected { border-color: var(--color-primary-light); background: var(--color-primary-50); }
+
+    &:has(.mat-radio-button[value="income"].mdc-radio--checked) {
+      border-color: var(--color-success);
+      background: #F0FDF4;
+    }
+
+    &:has(.mat-radio-button[value="expense"].mdc-radio--checked) {
+      border-color: var(--color-danger);
+      background: #FFF5F5;
+    }
+  }
+
+  &__content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    font-size: 14px;
+
+    mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+
+    &.income {
+      color: var(--color-success);
+      mat-icon { color: var(--color-success); }
+    }
+
+    &.expense {
+      color: var(--color-danger);
+      mat-icon { color: var(--color-danger); }
+    }
+  }
+}
+
+mat-spinner {
+  display: inline-block;
+}

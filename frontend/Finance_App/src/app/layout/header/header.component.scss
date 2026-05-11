@@ -1,0 +1,128 @@
+.header {
+  height: var(--header-height);
+  min-height: var(--header-height);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 0 8px;
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  box-shadow: var(--shadow-xs);
+  position: relative;
+  z-index: 50;
+
+  &__left,
+  &__right {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__menu-btn {
+    color: var(--color-text-muted);
+
+    &:hover {
+      color: var(--color-primary);
+    }
+  }
+
+  &__divider {
+    width: 1px;
+    height: 24px;
+    background: var(--color-border);
+    margin: 0 8px;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__brand-icon {
+    color: var(--color-primary-light);
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
+
+  &__brand-label {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-text);
+    letter-spacing: -0.01em;
+  }
+
+  &__avatar-btn {
+    padding: 0;
+    width: 36px;
+    height: 36px;
+  }
+
+  &__avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    mat-icon {
+      color: #fff;
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+}
+
+/* User menu dropdown */
+.user-menu-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+
+  &__avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+      color: #fff;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  &__email {
+    font-size: 12px;
+    color: var(--color-text-muted);
+  }
+}
+
+.menu-item--danger {
+  color: var(--color-danger) !important;
+
+  mat-icon {
+    color: var(--color-danger) !important;
+  }
+}

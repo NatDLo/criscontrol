@@ -1,0 +1,11 @@
+<div class="layout" [class.sidebar-collapsed]="!sidebarOpen()">
+  <app-sidebar [isOpen]="sidebarOpen()" />
+
+  <div class="layout__main">
+    <app-header (menuToggle)="toggleSidebar()" />
+
+    <main class="layout__content">
+      <router-outlet />
+    </main>
+  </div>
+</div>

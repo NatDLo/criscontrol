@@ -1,0 +1,41 @@
+<aside class="sidebar" [class.sidebar--collapsed]="!isOpen">
+
+  <!-- Brand -->
+  <div class="sidebar__brand">
+    <div class="sidebar__logo">
+      <mat-icon>account_balance_wallet</mat-icon>
+    </div>
+    @if (isOpen) {
+      <div class="sidebar__brand-text">
+        <span class="sidebar__brand-name">FinanceApp</span>
+        <span class="sidebar__brand-sub">Gestión Financiera</span>
+      </div>
+    }
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar__nav">
+    @for (item of navItems; track item.path) {
+      <a
+        class="sidebar__nav-item"
+        [routerLink]="item.path"
+        routerLinkActive="sidebar__nav-item--active"
+        [matTooltip]="!isOpen ? item.label : ''"
+        matTooltipPosition="right"
+      >
+        <mat-icon class="sidebar__nav-icon">{{ item.icon }}</mat-icon>
+        @if (isOpen) {
+          <span class="sidebar__nav-label">{{ item.label }}</span>
+        }
+      </a>
+    }
+  </nav>
+
+  <!-- Footer -->
+  <div class="sidebar__footer">
+    <div class="sidebar__version">
+      @if (isOpen) { <span>v1.0.0</span> }
+    </div>
+  </div>
+
+</aside>

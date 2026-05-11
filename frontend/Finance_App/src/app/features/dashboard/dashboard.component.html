@@ -1,0 +1,121 @@
+<div class="dashboard">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="flex-row">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Resumen financiero de tu actividad</p>
+      </div>
+      <span class="spacer"></span>
+
+      <!-- Period Selector -->
+      <div class="period-selector">
+        <button
+          [class.active]="selectedPeriod() === 'month'"
+          (click)="selectPeriod('month')">
+          Este mes
+        </button>
+        <button
+          [class.active]="selectedPeriod() === 'quarter'"
+          (click)="selectPeriod('quarter')">
+          Trimestre
+        </button>
+        <button
+          [class.active]="selectedPeriod() === 'year'"
+          (click)="selectPeriod('year')">
+          Este año
+        </button>
+      </div>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="40" />
+    </div>
+  } @else {
+
+    <!-- Summary Cards -->
+    <div class="dashboard__cards">
+      <app-summary-card
+        label="Balance Total"
+        [value]="summary()?.balance ?? 0"
+        icon="account_balance"
+        variant="balance"
+      />
+      <app-summary-card
+        label="Ingresos del Período"
+        [value]="summary()?.totalIncome ?? 0"
+        icon="arrow_downward"
+        variant="income"
+      />
+      <app-summary-card
+        label="Gastos del Período"
+        [value]="summary()?.totalExpenses ?? 0"
+        icon="arrow_upward"
+        variant="expense"
+      />
+      <app-summary-card
+        label="Transacciones"
+        [value]="summary()?.transactionCount ?? 0"
+        icon="receipt_long"
+        variant="count"
+        [isCurrency]="false"
+      />
+    </div>
+
+    <!-- Recent Transactions -->
+    <div class="card dashboard__recent">
+      <div class="dashboard__section-header">
+        <h2>Transacciones Recientes</h2>
+        <a routerLink="/transactions" class="view-all-link">
+          Ver todas
+          <mat-icon>arrow_forward</mat-icon>
+        </a>
+      </div>
+
+      @if (recentTx().length === 0) {
+        <div class="empty-state">
+          <mat-icon>receipt_long</mat-icon>
+          <p>No hay transacciones registradas</p>
+          <a routerLink="/transactions" mat-button color="primary">
+            Agregar transacción
+          </a>
+        </div>
+      } @else {
+        <div class="recent-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Tipo</th>
+                <th class="text-right">Monto</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (tx of recentTx(); track tx.id) {
+                <tr>
+                  <td class="date-cell">{{ tx.date | date:'dd/MM/yyyy' }}</td>
+                  <td class="desc-cell">{{ tx.description }}</td>
+                  <td class="cat-cell">{{ tx.categoryName ?? '—' }}</td>
+                  <td>
+                    <span class="badge" [class]="'badge--' + tx.type">
+                      {{ tx.type === 'income' ? 'Ingreso' : 'Gasto' }}
+                    </span>
+                  </td>
+                  <td class="amount-cell" [class]="tx.type === 'income' ? 'text-income' : 'text-expense'">
+                    {{ (tx.type === 'expense' ? '-' : '+') }}{{ tx.amount | currency:'MXN':'symbol-narrow':'1.2-2' }}
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+
+  }
+</div>

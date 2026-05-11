@@ -1,0 +1,147 @@
+<div class="categories">
+
+  <!-- Page Header -->
+  <div class="page-header">
+    <div class="flex-row">
+      <div>
+        <h1>Categorías</h1>
+        <p>Organiza tus transacciones por categoría</p>
+      </div>
+      <span class="spacer"></span>
+      <button mat-raised-button color="primary" (click)="openNew()">
+        <mat-icon>add</mat-icon>
+        Nueva categoría
+      </button>
+    </div>
+  </div>
+
+  <div class="categories__layout">
+
+    <!-- Category Grid -->
+    <div class="categories__grid-section">
+      @if (loading()) {
+        <div class="loading-center"><mat-spinner diameter="36" /></div>
+      } @else if (categories().length === 0) {
+        <div class="empty-card card">
+          <mat-icon>category</mat-icon>
+          <h3>Sin categorías</h3>
+          <p>Crea tu primera categoría para empezar a organizar tus finanzas.</p>
+          <button mat-raised-button color="primary" (click)="openNew()">
+            Crear categoría
+          </button>
+        </div>
+      } @else {
+        <div class="cat-grid">
+          @for (cat of categories(); track cat.id) {
+            <div class="cat-card card">
+              <div class="cat-card__header">
+                <div class="cat-card__icon" [style.background]="cat.color + '1A'">
+                  <mat-icon [style.color]="cat.color">{{ cat.icon ?? 'category' }}</mat-icon>
+                </div>
+                <div class="cat-card__actions">
+                  <button mat-icon-button [matMenuTriggerFor]="menu" class="cat-card__menu-btn">
+                    <mat-icon>more_vert</mat-icon>
+                  </button>
+                  <mat-menu #menu="matMenu">
+                    <button mat-menu-item (click)="openEdit(cat)">
+                      <mat-icon>edit</mat-icon> Editar
+                    </button>
+                    <button mat-menu-item class="danger" (click)="confirmDelete(cat)">
+                      <mat-icon>delete</mat-icon> Eliminar
+                    </button>
+                  </mat-menu>
+                </div>
+              </div>
+
+              <div class="cat-card__body">
+                <h3>{{ cat.name }}</h3>
+                @if (cat.description) {
+                  <p>{{ cat.description }}</p>
+                }
+              </div>
+
+              <div class="cat-card__footer">
+                <span class="badge badge--neutral">{{ typeLabel(cat.type) }}</span>
+                @if (!cat.isActive) {
+                  <span class="badge badge--neutral inactive">Inactiva</span>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Inline Form Panel -->
+    @if (formOpen()) {
+      <aside class="form-panel card">
+        <div class="form-panel__header">
+          <h3>{{ editingId() ? 'Editar categoría' : 'Nueva categoría' }}</h3>
+          <button mat-icon-button (click)="closeForm()"><mat-icon>close</mat-icon></button>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" class="form-panel__body">
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="name" maxlength="60">
+            <mat-error>El nombre es requerido</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="type">
+              <mat-option value="income">Ingreso</mat-option>
+              <mat-option value="expense">Gasto</mat-option>
+              <mat-option value="both">Ambos</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ícono</mat-label>
+            <mat-select formControlName="icon">
+              @for (ic of icons; track ic) {
+                <mat-option [value]="ic">
+                  <div class="icon-option">
+                    <mat-icon>{{ ic }}</mat-icon>
+                    <span>{{ ic }}</span>
+                  </div>
+                </mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
+          <div class="color-picker-section">
+            <label class="form-label">Color</label>
+            <div class="color-swatches">
+              @for (c of colors; track c.value) {
+                <button
+                  type="button"
+                  class="color-swatch"
+                  [style.background]="c.value"
+                  [class.selected]="form.get('color')?.value === c.value"
+                  (click)="form.get('color')?.setValue(c.value)"
+                  [matTooltip]="c.label"
+                ></button>
+              }
+            </div>
+          </div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Descripción (opcional)</mat-label>
+            <textarea matInput formControlName="description" rows="2"></textarea>
+          </mat-form-field>
+
+          <div class="form-panel__actions">
+            <button mat-button type="button" (click)="closeForm()">Cancelar</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="saving()">
+              @if (saving()) { <mat-spinner diameter="16" /> }
+              @else { {{ editingId() ? 'Guardar' : 'Crear' }} }
+            </button>
+          </div>
+        </form>
+      </aside>
+    }
+
+  </div>
+</div>
