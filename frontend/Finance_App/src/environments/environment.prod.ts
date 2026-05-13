@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: '/api/',
+  apiUrl: 'https://criscontrol-4xks.onrender.com/api/',
 };
