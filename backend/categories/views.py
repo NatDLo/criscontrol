@@ -1,6 +1,6 @@
 from rest_framework import generics
 
-from users.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from .models import Category
 from .serializers import CategorySerializer
 

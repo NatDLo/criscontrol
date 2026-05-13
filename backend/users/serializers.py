@@ -61,7 +61,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                 username=username,
                 email=email,
                 password=password,
-                is_active=False,
+                is_active=True,
                 is_email_verified=True,
             )
 
