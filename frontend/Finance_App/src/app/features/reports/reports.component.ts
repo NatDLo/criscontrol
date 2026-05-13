@@ -24,9 +24,7 @@ import { Category, ReportFilter, ReportSummary, CategoryStat, MonthlyData } from
   imports: [
     ReactiveFormsModule,
     CurrencyPipe,
-    DatePipe,
     PercentPipe,
-    NgClass,
     MatButtonModule,
     MatIconModule,
     MatFormFieldModule,

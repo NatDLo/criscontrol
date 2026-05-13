@@ -15,7 +15,6 @@ import { Transaction } from '../../../../core/models';
   imports: [
     DatePipe,
     CurrencyPipe,
-    NgClass,
     MatTableModule,
     MatPaginatorModule,
     MatIconModule,
