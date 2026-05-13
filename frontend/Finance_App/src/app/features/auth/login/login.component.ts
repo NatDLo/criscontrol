@@ -55,15 +55,7 @@ export class LoginComponent {
     const payload: LoginDto = this.form.getRawValue();
 
     this.authService.login(payload).subscribe({
-      next: (res) => {
-        if (!res.user.is_email_verified) {
-          this.errorMessage.set(
-            'Tu cuenta existe pero el email no está verificado. Revisa tu correo.'
-          );
-          this.loading.set(false);
-          return;
-        }
-
+      next: () => {
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
