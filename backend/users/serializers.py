@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.contrib.auth.models import update_last_login
+from django.contrib.auth.password_validation import validate_password
 from django.core.mail import send_mail
 from django.db import transaction
 from django.urls import reverse
@@ -39,11 +40,19 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate(self, attrs):
         if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError({"password2": "Las contraseñas no coinciden."})
+
+        # Apply Django password validators configured in settings.py
+        temp_user = User(
+            username=attrs.get("username", "").strip(),
+            email=attrs.get("email", "").lower().strip(),
+        )
+        validate_password(attrs["password"], user=temp_user)
+
         return attrs
 
     def create(self, validated_data):
         request = self.context.get("request")
-        username = validated_data["username"]
+        username = validated_data["username"].strip()
         email = validated_data["email"].lower().strip()
         password = validated_data["password"]
 
@@ -57,6 +66,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             )
 
             if request is not None:
+
                 def send_verification_email():
                     uidb64 = urlsafe_base64_encode(force_bytes(user.pk))
                     token = email_verification_token.make_token(user)
@@ -81,11 +91,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        email = attrs.get(self.username_field)
-        password = attrs.get("password")
+        email = (attrs.get(self.username_field) or "").lower().strip()
+        password = attrs.get("password") or ""
+
+        if not email or not password:
+            raise AuthenticationFailed("Credenciales inválidas.")
 
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(email__iexact=email)
         except User.DoesNotExist:
             raise AuthenticationFailed("Credenciales inválidas.")
 
@@ -95,10 +108,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         if not user.is_active or not user.is_email_verified:
             raise AuthenticationFailed("Debes verificar tu email antes de iniciar sesión.")
 
-        data = {}
         refresh = self.get_token(user)
-        data["refresh"] = str(refresh)
-        data["access"] = str(refresh.access_token)
+        data = {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+        }
 
         if api_settings.UPDATE_LAST_LOGIN:
             update_last_login(None, user)
@@ -120,3 +134,53 @@ class LogoutSerializer(serializers.Serializer):
     def save(self, **kwargs):
         if self.token is not None:
             self.token.blacklist()
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("username", "first_name", "last_name")
+
+    def validate_email(self, value):
+        value = value.lower().strip()
+        qs = User.objects.filter(email__iexact=value).exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError("Ese email ya está en uso.")
+        return value
+
+    def validate_username(self, value):
+        value = value.strip()
+        qs = User.objects.filter(username=value).exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise serializers.ValidationError("This username is already in use. / Ese username ya está en uso.")
+        return value
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    current_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True, min_length=12)
+    new_password2 = serializers.CharField(write_only=True, min_length=12)
+
+    def validate(self, attrs):
+        request = self.context.get("request")
+        user = request.user
+
+        if not user.check_password(attrs["current_password"]):
+            raise serializers.ValidationError(
+                {"current_password": "La contraseña actual no es correcta."}
+            )
+
+        if attrs["new_password"] != attrs["new_password2"]:
+            raise serializers.ValidationError(
+                {"new_password2": "Las contraseñas no coinciden."}
+            )
+
+        validate_password(attrs["new_password"], user=user)
+        return attrs
+
+    def save(self, **kwargs):
+        request = self.context.get("request")
+        user = request.user
+        user.set_password(self.validated_data["new_password"])
+        user.save(update_fields=["password"])
+        return user

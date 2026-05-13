@@ -1,10 +1,13 @@
 from rest_framework import generics
+
+from users.permissions import IsEmailVerified
 from .models import Category
 from .serializers import CategorySerializer
 
 
 class CategoryListCreateView(generics.ListCreateAPIView):
     serializer_class = CategorySerializer
+    permission_classes = [IsEmailVerified]
 
     def get_queryset(self):
         return Category.objects.filter(owner=self.request.user)
@@ -15,6 +18,7 @@ class CategoryListCreateView(generics.ListCreateAPIView):
 
 class CategoryDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CategorySerializer
+    permission_classes = [IsEmailVerified]
 
     def get_queryset(self):
         return Category.objects.filter(owner=self.request.user)

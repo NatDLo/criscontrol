@@ -80,6 +80,8 @@
     [transactions]="transactions()"
     [total]="total()"
     [loading]="loading()"
+    [page]="currentFilter.page ?? 1"
+    [pageSize]="currentFilter.pageSize ?? 10"
     (edit)="openForm($event)"
     (delete)="confirmDelete($event)"
     (pageChange)="onPageChange($event)"

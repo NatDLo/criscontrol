@@ -1,16 +1,17 @@
 from rest_framework import generics
+
+from users.permissions import IsEmailVerified
 from .models import Transaction
 from .serializers import TransactionSerializer
 
 
 class TransactionListCreateView(generics.ListCreateAPIView):
     serializer_class = TransactionSerializer
+    permission_classes = [IsEmailVerified]
 
     def get_queryset(self):
         queryset = (
-            Transaction.objects
-            .filter(owner=self.request.user)
-            .select_related("category")
+            Transaction.objects.filter(owner=self.request.user).select_related("category")
         )
 
         start_date = self.request.query_params.get("start_date")
@@ -38,10 +39,9 @@ class TransactionListCreateView(generics.ListCreateAPIView):
 
 class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TransactionSerializer
+    permission_classes = [IsEmailVerified]
 
     def get_queryset(self):
         return (
-            Transaction.objects
-            .filter(owner=self.request.user)
-            .select_related("category")
+            Transaction.objects.filter(owner=self.request.user).select_related("category")
         )

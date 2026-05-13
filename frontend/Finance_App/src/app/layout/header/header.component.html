@@ -21,10 +21,6 @@
   <!-- Right: actions -->
   <div class="header__right">
 
-    <button mat-icon-button matTooltip="Notificaciones">
-      <mat-icon>notifications_none</mat-icon>
-    </button>
-
     <!-- User menu -->
     <button mat-icon-button [matMenuTriggerFor]="userMenu" class="header__avatar-btn">
       <div class="header__avatar">
@@ -39,7 +35,7 @@
         </div>
         <div class="user-menu-header__info">
           <span class="user-menu-header__name">
-            {{ authService.currentUser()?.name ?? 'Usuario' }}
+            {{ authService.currentUser()?.first_name || authService.currentUser()?.username || 'Usuario' }}
           </span>
           <span class="user-menu-header__email">
             {{ authService.currentUser()?.email ?? '' }}
@@ -49,14 +45,9 @@
 
       <mat-divider />
 
-      <button mat-menu-item>
+      <button mat-menu-item routerLink="/profile">
         <mat-icon>manage_accounts</mat-icon>
         Mi perfil
-      </button>
-
-      <button mat-menu-item>
-        <mat-icon>settings</mat-icon>
-        Configuración
       </button>
 
       <mat-divider />

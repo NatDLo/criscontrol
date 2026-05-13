@@ -167,11 +167,18 @@
 }
 
 /* Icon option */
+.icon-trigger,
 .icon-option {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 13px;
+}
+
+.icon-trigger mat-icon,
+.icon-option mat-icon {
+  width: 20px;
+  height: 20px;
+  font-size: 20px;
 }
 
 /* Empty */

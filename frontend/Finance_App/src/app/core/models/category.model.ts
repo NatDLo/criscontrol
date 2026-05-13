@@ -1,14 +1,15 @@
 export type CategoryType = 'income' | 'expense' | 'both';
+export type BackendCategoryType = 'INCOME' | 'EXPENSE';
 
 export interface Category {
   id: string;
   name: string;
   type: CategoryType;
-  color?: string;
-  icon?: string;
+  cat_type: BackendCategoryType;
   description?: string;
   isActive: boolean;
-  createdAt?: string;
+  color?: string;
+  icon?: string;
 }
 
 export interface CreateCategoryDto {

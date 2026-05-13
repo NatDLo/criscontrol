@@ -99,13 +99,21 @@
 
           <mat-form-field appearance="outline">
             <mat-label>Ícono</mat-label>
+
             <mat-select formControlName="icon">
+              <mat-select-trigger>
+                <span class="icon-trigger">
+                  <mat-icon>{{ form.get('icon')?.value }}</mat-icon>
+                  <span>{{ form.get('icon')?.value }}</span>
+                </span>
+              </mat-select-trigger>
+
               @for (ic of icons; track ic) {
                 <mat-option [value]="ic">
-                  <div class="icon-option">
+                  <span class="icon-option">
                     <mat-icon>{{ ic }}</mat-icon>
                     <span>{{ ic }}</span>
-                  </div>
+                  </span>
                 </mat-option>
               }
             </mat-select>

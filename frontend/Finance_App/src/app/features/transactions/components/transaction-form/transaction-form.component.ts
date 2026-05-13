@@ -62,10 +62,11 @@ export class TransactionFormComponent implements OnInit {
     this.form = this.fb.group({
       type:        [tx?.type ?? 'expense', Validators.required],
       amount:      [tx?.amount ?? null, [Validators.required, Validators.min(0.01)]],
+      currency:    [tx?.currency ?? 'USD', Validators.required],
       categoryId:  [tx?.categoryId ?? '', Validators.required],
       description: [tx?.description ?? '', [Validators.required, Validators.maxLength(200)]],
       date:        [tx?.date ? new Date(tx.date) : new Date(), Validators.required],
-      notes:       [tx?.notes ?? ''],
+      
     });
   }
 

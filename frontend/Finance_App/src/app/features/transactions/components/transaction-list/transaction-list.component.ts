@@ -1,15 +1,7 @@
-import {
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  ViewChild,
-  AfterViewInit,
-} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { DatePipe, CurrencyPipe, NgClass } from '@angular/common';
-import { MatTableModule, MatTableDataSource } from '@angular/material/table';
-import { MatPaginatorModule, MatPaginator } from '@angular/material/paginator';
-import { MatSortModule, MatSort } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -26,7 +18,6 @@ import { Transaction } from '../../../../core/models';
     NgClass,
     MatTableModule,
     MatPaginatorModule,
-    MatSortModule,
     MatIconModule,
     MatButtonModule,
     MatTooltipModule,
@@ -35,32 +26,20 @@ import { Transaction } from '../../../../core/models';
   templateUrl: './transaction-list.component.html',
   styleUrl: './transaction-list.component.scss',
 })
-export class TransactionListComponent implements AfterViewInit {
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort)      sort!: MatSort;
-
-  @Output() edit   = new EventEmitter<Transaction>();
-  @Output() delete = new EventEmitter<Transaction>();
-
-  readonly columns = ['date', 'description', 'category', 'type', 'amount', 'actions'];
-  readonly dataSource = new MatTableDataSource<Transaction>([]);
-
-  @Input() set transactions(data: Transaction[]) {
-    this.dataSource.data = data;
-  }
-
-  @Input() total    = 0;
-  @Input() loading  = false;
+export class TransactionListComponent {
+  @Input() transactions: Transaction[] = [];
+  @Input() total = 0;
+  @Input() loading = false;
   @Input() pageSize = 10;
+  @Input() page = 1;
 
+  @Output() edit = new EventEmitter<Transaction>();
+  @Output() delete = new EventEmitter<Transaction>();
   @Output() pageChange = new EventEmitter<{ page: number; pageSize: number }>();
 
-  ngAfterViewInit(): void {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort      = this.sort;
-  }
+  readonly columns = ['date', 'description', 'category', 'type', 'amount', 'actions'];
 
-  onPage(event: { pageIndex: number; pageSize: number }): void {
+  onPage(event: PageEvent): void {
     this.pageChange.emit({ page: event.pageIndex + 1, pageSize: event.pageSize });
   }
 }

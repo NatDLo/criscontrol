@@ -1,4 +1,5 @@
 export type TransactionType = 'income' | 'expense';
+export type CurrencyOption = 'ARS' | 'USD' | 'EUR' | 'CUSTOM';
 
 export interface Transaction {
   id: string;
@@ -7,10 +8,11 @@ export interface Transaction {
   categoryId: string;
   categoryName?: string;
   description: string;
-  date: string; // ISO date: YYYY-MM-DD
+  date: string;
   notes?: string;
-  createdAt?: string;
-  updatedAt?: string;
+  currency: CurrencyOption;
+  customCurrency?: string | null;
+  currencyDisplay?: string;
 }
 
 export interface CreateTransactionDto {
@@ -20,15 +22,19 @@ export interface CreateTransactionDto {
   description: string;
   date: string;
   notes?: string;
+  currency?: CurrencyOption;
+  customCurrency?: string;
 }
 
 export type UpdateTransactionDto = Partial<CreateTransactionDto>;
 
 export interface TransactionFilter {
+  search?: string;
   startDate?: string;
   endDate?: string;
   type?: TransactionType | 'all';
   categoryId?: string;
+  currency?: CurrencyOption | string;
   minAmount?: number;
   maxAmount?: number;
   page?: number;

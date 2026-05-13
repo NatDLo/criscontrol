@@ -1,0 +1,108 @@
+<div class="profile-page">
+  <div class="profile-grid">
+    <mat-card class="card">
+      <h2>Mi perfil</h2>
+      <p class="muted">Actualiza tus datos personales.</p>
+
+      <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="form-grid">
+        <mat-form-field appearance="outline">
+          <mat-label>Usuario</mat-label>
+          <input matInput formControlName="username" />
+          <mat-error *ngIf="profileForm.controls.username.hasError('required')">
+            El usuario es obligatorio.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="first_name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Apellido</mat-label>
+          <input matInput formControlName="last_name" />
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" formControlName="email" readonly />
+        </mat-form-field>
+
+        <div class="actions full">
+          <button mat-flat-button color="primary" type="submit" [disabled]="savingProfile()">
+            <mat-spinner *ngIf="savingProfile()" diameter="18"></mat-spinner>
+            <span *ngIf="!savingProfile()">Guardar perfil</span>
+          </button>
+        </div>
+      </form>
+    </mat-card>
+
+    <mat-card class="card">
+      <h2>Cambiar contraseña</h2>
+      <p class="muted">Usa una contraseña segura (mínimo 12 caracteres).</p>
+
+      <form [formGroup]="passwordForm" (ngSubmit)="changePassword()" class="form-grid">
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Contraseña actual</mat-label>
+          <input
+            matInput
+            [type]="hideCurrent() ? 'password' : 'text'"
+            formControlName="current_password"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hideCurrent.set(!hideCurrent())"
+          >
+            <mat-icon>{{ hideCurrent() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Nueva contraseña</mat-label>
+          <input
+            matInput
+            [type]="hideNew() ? 'password' : 'text'"
+            formControlName="new_password"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hideNew.set(!hideNew())"
+          >
+            <mat-icon>{{ hideNew() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="passwordForm.controls.new_password.hasError('minlength')">
+            Debe tener al menos 12 caracteres.
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="full">
+          <mat-label>Confirmar nueva contraseña</mat-label>
+          <input
+            matInput
+            [type]="hideNew2() ? 'password' : 'text'"
+            formControlName="new_password2"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hideNew2.set(!hideNew2())"
+          >
+            <mat-icon>{{ hideNew2() ? 'visibility' : 'visibility_off' }}</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="actions full">
+          <button mat-flat-button color="primary" type="submit" [disabled]="savingPassword()">
+            <mat-spinner *ngIf="savingPassword()" diameter="18"></mat-spinner>
+            <span *ngIf="!savingPassword()">Actualizar contraseña</span>
+          </button>
+        </div>
+      </form>
+    </mat-card>
+  </div>
+</div>

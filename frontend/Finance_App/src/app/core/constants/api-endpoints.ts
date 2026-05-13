@@ -4,27 +4,22 @@
  */
 export const API_ENDPOINTS = {
   AUTH: {
-    LOGIN:   '/auth/login',
-    LOGOUT:  '/auth/logout',
-    ME:      '/auth/me',
-    REFRESH: '/auth/refresh',
+    LOGIN:   '/auth/login/',
+    LOGOUT:  '/auth/logout/',
+    ME:      '/auth/me/',
+    REFRESH: '/auth/refresh/',
+    REGISTER: '/auth/register/',
+    CHANGE_PASSWORD: '/auth/change-password/',
   },
 
   TRANSACTIONS: {
-    BASE:    '/transactions',
-    BY_ID:   (id: string) => `/transactions/${id}`,
-    SUMMARY: '/transactions/summary',
+    BASE:    '/transactions/',
+    BY_ID:   (id: string) => `/transactions/${id}/`,
   },
 
   CATEGORIES: {
-    BASE:  '/categories',
-    BY_ID: (id: string) => `/categories/${id}`,
+    BASE:  '/categories/',
+    BY_ID: (id: string) => `/categories/${id}/`,
   },
 
-  REPORTS: {
-    SUMMARY:     '/reports/summary',
-    MONTHLY:     '/reports/monthly',
-    BY_CATEGORY: '/reports/by-category',
-    EXPORT:      '/reports/export',
-  },
 } as const;

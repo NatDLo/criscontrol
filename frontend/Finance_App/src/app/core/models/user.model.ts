@@ -1,10 +1,11 @@
 export interface User {
   id: string;
-  name: string;
+  username: string;
   email: string;
-  role: 'admin' | 'user';
-  avatarUrl?: string;
-  createdAt?: string;
+  first_name: string;
+  last_name: string;
+  is_email_verified: boolean;
+  date_joined: string;
 }
 
 export interface LoginDto {
@@ -13,8 +14,20 @@ export interface LoginDto {
 }
 
 export interface AuthResponse {
-  accessToken: string;
-  tokenType: string;
-  expiresIn: number;
+  access: string;
+  refresh: string;
   user: User;
+}
+
+export interface UpdateProfileDto {
+  username?: string;
+  first_name?: string;
+  last_name?: string;
+  email?: string;
+}
+
+export interface ChangePasswordDto {
+  current_password: string;
+  new_password: string;
+  new_password2: string;
 }

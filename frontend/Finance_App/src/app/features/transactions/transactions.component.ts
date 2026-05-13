@@ -56,7 +56,7 @@ export class TransactionsComponent implements OnInit {
   readonly loading      = signal(false);
 
   filterForm!: FormGroup;
-  private currentFilter: TransactionFilter = { page: 1, pageSize: 10 };
+  currentFilter: TransactionFilter = { page: 1, pageSize: 10 };
 
   ngOnInit(): void {
     this.filterForm = this.fb.group({
