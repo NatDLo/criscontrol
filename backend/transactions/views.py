@@ -1,13 +1,13 @@
 from rest_framework import generics
 
-from users.permissions import IsEmailVerified
+from users.permissions import IsAuthenticated
 from .models import Transaction
 from .serializers import TransactionSerializer
 
 
 class TransactionListCreateView(generics.ListCreateAPIView):
     serializer_class = TransactionSerializer
-    permission_classes = [IsEmailVerified]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         queryset = (
@@ -39,7 +39,7 @@ class TransactionListCreateView(generics.ListCreateAPIView):
 
 class TransactionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TransactionSerializer
-    permission_classes = [IsEmailVerified]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return (

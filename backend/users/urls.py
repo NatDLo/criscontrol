@@ -10,9 +10,5 @@ urlpatterns = [
     path("logout/", LogoutView.as_view(), name="logout"),
     path("me/", MeView.as_view(), name="me"),
     path("change-password/", ChangePasswordView.as_view(), name="change-password"),
-    path(
-        "verify-email/<str:uidb64>/<str:token>/",
-        VerifyEmailView.as_view(),
-        name="verify-email",
-    ),
+    
 ]

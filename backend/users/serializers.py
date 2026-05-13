@@ -62,7 +62,7 @@ class RegisterSerializer(serializers.ModelSerializer):
                 email=email,
                 password=password,
                 is_active=False,
-                is_email_verified=False,
+                is_email_verified=True,
             )
 
             if request is not None:
@@ -105,8 +105,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         if not user.check_password(password):
             raise AuthenticationFailed("Credenciales inválidas.")
 
-        if not user.is_active or not user.is_email_verified:
-            raise AuthenticationFailed("Debes verificar tu email antes de iniciar sesión.")
+        if not user.is_active:
+            raise AuthenticationFailed("Inactive user / Usuario inactivo.")
 
         refresh = self.get_token(user)
         data = {
