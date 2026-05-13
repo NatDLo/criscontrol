@@ -1,36 +1,20 @@
-services:
-  - type: web
-    name: criscontrol-backend
-    env: docker
-    dockerfilePath: backend/Dockerfile
-    buildCommand: ""
-    startCommand: gunicorn backend.wsgi:application --bind 0.0.0.0:$PORT
-    envVars:
-      - key: DJANGO_SECRET_KEY
-        value: "django-insecure-s%y1@_!oi(-1q=%x-&_*4x$0c!@6in5z=$9sg66&ai4-c7!*@!"
-      - key: DATABASE_URL
-        value: "postgres://criscontrol_user:password@criscontrol-db:5432/criscontrol_db"
-      - key: DEBUG
-        value: "False"
-    dependsOn:
-      - criscontrol-db
+# We use the official Python slim image as base
+FROM python:3.11-slim
 
-  - type: static
-    name: criscontrol-frontend
-    buildCommand: npm install && npm run build --prod
-    staticPublishPath: dist/finance-app
-    envVars:
-      - key: API_URL
-        value: "https://criscontrol-backend.onrender.com/api"
+# Set the working directory
+WORKDIR /app
 
-  - type: database
-    name: criscontrol-db
-    plan: free
-    postgresVersion: 15
-    envVars:
-      - key: POSTGRES_USER
-        value: "criscontrol_user"
-      - key: POSTGRES_PASSWORD
-        value: "password"
-      - key: POSTGRES_DB
-        value: "criscontrol_db"
+# Copy requirements and install them first (to leverage cache)
+COPY requirements.txt .
+
+RUN pip install --upgrade pip setuptools wheel \
+    && pip install --no-cache-dir --only-binary=:all: -r requirements.txt
+
+# Copy the entire project
+COPY . .
+
+# Expose the port that uvicorn will use
+EXPOSE 8000
+
+# Start command
+CMD ["uvicorn", "util.main:app", "--host", "0.0.0.0", "--port", "$PORT"]
