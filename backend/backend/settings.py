@@ -56,7 +56,7 @@ if not DEBUG:
 
 ALLOWED_HOSTS = [
     host.strip()
-    for host in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
+    for host in os.getenv("ALLOWED_HOSTS", "localhost,127.0.0.1,criscontrol-4xks.onrender.com").split(",")
     if host.strip()
 ]
 
