@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import { Observable, catchError, map, of, switchMap, tap } from 'rxjs';
+import { Observable, catchError, map, of, switchMap, tap, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { API_ENDPOINTS } from '../constants/api-endpoints';
 import { AuthResponse, LoginDto, User, UpdateProfileDto, ChangePasswordDto } from '../models';
@@ -136,6 +136,23 @@ export class AuthService {
       this.api(API_ENDPOINTS.AUTH.CHANGE_PASSWORD),
       dto
     );
+  }
+
+    refreshToken(): Observable<{ access: string; refresh: string }> {
+    const refresh = this._refresh();
+
+    if (!refresh) {
+      return throwError(() => new Error('No refresh token available'));
+    }
+
+    return this.http
+      .post<{ access: string; refresh: string }>(
+        this.api(API_ENDPOINTS.AUTH.REFRESH),
+        { refresh }
+      )
+      .pipe(
+        tap((tokens) => this.persistTokens(tokens.access, tokens.refresh))
+      );
   }
 }
 

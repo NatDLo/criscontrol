@@ -1,6 +1,6 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { catchError, throwError } from 'rxjs';
+import { catchError, switchMap, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
 /**
@@ -14,6 +14,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   const isAuthEndpoint =
     req.url.includes('/api/auth/login/') ||
+    req.url.includes('/api/auth/logout/') ||
     req.url.includes('/api/auth/register/') ||
     req.url.includes('/api/auth/refresh/');
 
@@ -24,8 +25,23 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(cloned).pipe(
     catchError((error: HttpErrorResponse) => {
+      // Si 401 y no es endpoint de auth, intentar refresh
       if (error.status === 401 && !isAuthEndpoint) {
-        authService.handleUnauthorized();
+        return authService.refreshToken().pipe(
+          switchMap(() => {
+            // Refresh exitoso, reintentar el request original con nuevo token
+            const newToken = authService.getToken();
+            const retryReq = req.clone({
+              setHeaders: { Authorization: 'Bearer ' + newToken },
+            });
+            return next(retryReq);
+          }),
+          catchError(() => {
+            // Refresh falló, logout
+            authService.handleUnauthorized();
+            return throwError(() => error);
+          })
+        );
       }
       return throwError(() => error);
     })
