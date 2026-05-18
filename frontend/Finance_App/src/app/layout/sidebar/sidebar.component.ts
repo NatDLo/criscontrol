@@ -13,7 +13,7 @@ interface NavItem {
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, MatIconModule, MatTooltipModule, NgClass],
+  imports: [RouterLink, RouterLinkActive, MatIconModule, MatTooltipModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
 })

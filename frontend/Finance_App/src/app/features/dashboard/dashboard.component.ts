@@ -14,7 +14,6 @@ import { SummaryCardComponent } from './components/summary-card/summary-card.com
   selector: 'app-dashboard',
   standalone: true,
   imports: [
-    NgClass,
     CurrencyPipe,
     DatePipe,
     RouterLink,
