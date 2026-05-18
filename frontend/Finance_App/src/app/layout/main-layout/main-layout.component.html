@@ -1,6 +1,10 @@
 <div class="layout" [class.sidebar-collapsed]="!sidebarOpen()">
   <app-sidebar [isOpen]="sidebarOpen()" />
 
+  @if (sidebarOpen()) {
+    <div class="layout__overlay" (click)="closeSidebar()"></div>
+  }
+
   <div class="layout__main">
     <app-header (menuToggle)="toggleSidebar()" />
 

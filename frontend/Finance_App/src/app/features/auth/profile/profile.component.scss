@@ -1,11 +1,19 @@
 .profile-page {
   padding: 24px;
+
+  @media (max-width: 768px) {
+    padding: 16px;
+}
 }
 
 .profile-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
+
+  @media (max-width: 980px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .card {
@@ -26,6 +34,10 @@ h2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 12px;
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .full {
@@ -35,6 +47,17 @@ h2 {
 .actions {
   display: flex;
   justify-content: flex-end;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  @media (max-width: 640px) {
+    justify-content: stretch;
+
+    button {
+      flex: 1;
+      min-width: unset !important;
+    }
+  }
 }
 
 button[mat-flat-button] {
@@ -43,14 +66,9 @@ button[mat-flat-button] {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-}
 
-@media (max-width: 980px) {
-  .profile-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
+  @media (max-width: 640px) {
+    min-width: auto;
+    height: 40px;
   }
 }

@@ -3,10 +3,59 @@
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   overflow: hidden;
+
+  @media (max-width: 768px) {
+    border: none;
+    background: transparent;
+  }
 }
 
 .tx-table {
   width: 100%;
+
+  @media (max-width: 768px) {
+    display: block;
+    border-spacing: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  thead {
+    display: none;
+  }
+
+  tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  tr.tx-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 12px;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+
+  tr.tx-row td {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  tr.tx-row td::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--color-text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+  }
 }
 
 .desc-cell {
@@ -15,6 +64,12 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    max-width: unset;
+    white-space: normal;
+    text-overflow: unset;
+  }
 }
 
 .muted-cell {
@@ -26,6 +81,10 @@
   font-weight: 600;
   font-size: 14px;
   white-space: nowrap;
+
+  @media (max-width: 768px) {
+    white-space: normal;
+  }
 }
 
 .cell-right {
@@ -44,13 +103,22 @@
   .tx-row:hover & {
     opacity: 1;
   }
+
+  @media (max-width: 768px) {
+    opacity: 1;
+  }
 }
 
-.tx-row:hover .action-btn { opacity: 1; }
+.tx-row:hover .action-btn {
+  opacity: 1;
+}
 
 .item-danger {
   color: var(--color-danger) !important;
-  mat-icon { color: var(--color-danger) !important; }
+
+  mat-icon {
+    color: var(--color-danger) !important;
+  }
 }
 
 .no-data-cell {
@@ -71,5 +139,12 @@
     height: 40px;
   }
 
-  p { margin: 0; font-size: 14px; }
+  p {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  @media (max-width: 640px) {
+    padding: 24px;
+  }
 }

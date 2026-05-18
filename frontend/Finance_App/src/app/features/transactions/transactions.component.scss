@@ -27,7 +27,10 @@
   color: var(--color-text-muted);
   border-color: var(--color-border);
 
-  mat-icon { font-size: 18px; margin-right: 4px; }
+  mat-icon { 
+    font-size: 18px; 
+    margin-right: 4px;
+  }
 }
 
 .clear-btn {
@@ -35,7 +38,9 @@
   height: 56px; // matches outline form field
   align-self: start;
 
-  mat-icon { margin-right: 4px; }
+  mat-icon { 
+    margin-right: 4px; 
+  }
 }
 
 .results-bar {

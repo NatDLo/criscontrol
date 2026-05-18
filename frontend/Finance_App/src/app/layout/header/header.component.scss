@@ -126,3 +126,14 @@
     color: var(--color-danger) !important;
   }
 }
+
+@media (max-width: 768px) {
+  .header {
+    padding: 0 16px 0 4px;
+    
+    &__brand,
+    &__divider {
+      display: none;
+    }
+  }
+}

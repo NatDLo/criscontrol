@@ -11,6 +11,10 @@
 
     &:has(.form-panel) {
       grid-template-columns: 1fr 360px;
+
+      @media (max-width: 1024px) {
+        grid-template-columns: 1fr;
+      }
     }
   }
 
@@ -23,6 +27,15 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 16px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 12px;
+  }
+
+  @media (max-width: 480px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .cat-card {
@@ -42,6 +55,10 @@
     align-items: flex-start;
     justify-content: space-between;
     padding: 16px 12px 8px 16px;
+
+    @media (max-width: 640px) {
+      padding: 12px 8px 6px 12px;
+    }
   }
 
   &__icon {
@@ -83,6 +100,18 @@
       color: var(--color-text-muted);
       line-height: 1.4;
     }
+
+    @media (max-width: 640px) {
+      padding: 2px 12px 8px;
+      
+      h3 {
+        font-size: 13px;
+      }
+
+      p {
+        font-size: 11px;
+      }
+    }
   }
 
   &__footer {
@@ -90,6 +119,10 @@
     border-top: 1px solid var(--color-border);
     display: flex;
     gap: 6px;
+
+    @media (max-width: 640px) {
+      padding: 8px 12px;
+    }
   }
 }
 

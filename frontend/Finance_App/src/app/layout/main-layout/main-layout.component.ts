@@ -16,4 +16,8 @@ export class MainLayoutComponent {
   toggleSidebar(): void {
     this.sidebarOpen.update((v) => !v);
   }
+
+  closeSidebar(): void {
+    this.sidebarOpen.set(false);
+  }
 }

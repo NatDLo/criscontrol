@@ -128,3 +128,15 @@
     text-align: center;
   }
 }
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 280px;
+    min-width: 280px;
+    
+    &--collapsed {
+      width: 0;
+      min-width: 0;
+    }
+  }
+}

@@ -69,6 +69,20 @@
 .recent-table {
   overflow-x: auto;
 
+  @media (max-width: 768px) {
+    overflow-x: hidden;
+  }
+
+  table {
+    @media (max-width: 768px) {
+      font-size: 12px;
+      
+      th, td {
+        padding: 8px 12px;
+      }
+    }
+  }
+
   table {
     width: 100%;
     border-collapse: collapse;
@@ -97,7 +111,20 @@
 }
 
 .date-cell { color: var(--color-text-muted); white-space: nowrap; }
-.desc-cell { font-weight: 500; max-width: 240px; }
+
+.desc-cell { 
+  font-weight: 500; 
+  max-width: 240px; 
+
+  @media (max-width: 768px) {
+    max-width: 120px;
+  }
+  
+  @media (max-width: 480px) {
+    max-width: 80px;
+  }
+}
+
 .cat-cell  { color: var(--color-text-muted); }
 .amount-cell { font-weight: 600; text-align: right; white-space: nowrap; }
 .text-right { text-align: right; }
