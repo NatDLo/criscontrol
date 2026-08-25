@@ -1,0 +1,12 @@
+[run]
+source = categories,transactions,users
+
+[report]
+omit =
+    */migrations/*
+    */tests.py
+    */admin.py
+    */apps.py
+    */__init__.py
+exclude_lines =
+    pragma: no cover

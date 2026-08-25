@@ -62,7 +62,7 @@ export class ExcelExportService {
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Transacciones');
-    XLSX.writeFile(wb, `${fileName}_${this.today()}.xlsx`);
+    this.writeFile(wb, `${fileName}_${this.today()}.xlsx`);
   }
 
   exportSummary(
@@ -76,7 +76,7 @@ export class ExcelExportService {
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Resumen');
-    XLSX.writeFile(wb, `${fileName}_${this.today()}.xlsx`);
+    this.writeFile(wb, `${fileName}_${this.today()}.xlsx`);
   }
 
   exportReportWorkbook(input: ReportWorkbookInput, fileName = 'reporte_financiero'): void {
@@ -153,7 +153,7 @@ export class ExcelExportService {
     ];
     XLSX.utils.book_append_sheet(wb, wsTransactions, 'Movimientos');
 
-    XLSX.writeFile(wb, `${fileName}_${this.today()}.xlsx`);
+    this.writeFile(wb, `${fileName}_${this.today()}.xlsx`);
   }
 
   saveBlob(blob: Blob, fileName = 'reporte'): void {
@@ -167,5 +167,9 @@ export class ExcelExportService {
 
   private today(): string {
     return new Date().toISOString().split('T')[0];
+  }
+
+  private writeFile(workbook: XLSX.WorkBook, fileName: string): void {
+    XLSX.writeFile(workbook, fileName);
   }
 }

@@ -1,13 +1,13 @@
 # FinanceApp – Angular 17
 
-Aplicación de gestión de finanzas personales/empresariales.
+Personal and business finance management application.
 
 ## Tech Stack
 
 - **Angular 17** (standalone components, signals, new control flow `@if/@for`)
 - **Angular Material 17** (UI components)
-- **SheetJS (xlsx)** (exportación Excel cliente-side)
-- **RxJS 7** (gestión de estado asíncrono)
+- **SheetJS (xlsx)** (client-side Excel export)
+- **RxJS 7** (asynchronous state management)
 - **TypeScript 5.4**
 
 ---
@@ -19,51 +19,44 @@ src/app/
 ├── core/
 │   ├── constants/      # API endpoints
 │   ├── interceptors/   # auth + error HTTP interceptors
-│   ├── models/         # interfaces TypeScript (Transaction, Category, Report, User...)
+│   ├── models/         # TypeScript interfaces (Transaction, Category, Report, User...)
 │   └── services/       # TransactionService, CategoryService, ReportService, AuthService, ExcelExportService
 ├── features/
-│   ├── dashboard/      # Resumen financiero + tarjetas KPI
-│   ├── transactions/   # CRUD de ingresos/gastos + tabla + form dialog
-│   ├── categories/     # CRUD de categorías
-│   └── reports/        # Generación de reportes + exportación Excel
+│   ├── dashboard/      # Financial summary + KPI cards
+│   ├── transactions/   # Income/expense CRUD + table + form dialog
+│   ├── categories/     # Category CRUD
+│   └── reports/        # Report generation + Excel export
 ├── layout/
-│   ├── header/         # Barra superior con menú de usuario
-│   ├── main-layout/    # Shell principal (sidebar + router-outlet)
-│   └── sidebar/        # Navegación lateral colapsable
+│   ├── header/         # Top bar with user menu
+│   ├── main-layout/    # Main shell (sidebar + router-outlet)
+│   └── sidebar/        # Collapsible side navigation
 └── shared/
     ├── components/
-    │   └── confirm-dialog/  # Dialog reutilizable de confirmación
+    │   └── confirm-dialog/  # Reusable confirmation dialog
     └── pipes/
         └── abs.pipe.ts      # Pipe valor absoluto
 ```
 
 ---
 
-## API Python Backend
+## Python Backend API
 
-La app espera una API REST en `http://localhost:8000/api/v1` (configurable en `src/environments/environment.ts`).
+La app usa `http://127.0.0.1:8000/api/` en desarrollo, configurable en `src/environments/environment.ts`.
 
-### Endpoints esperados
+### Endpoints
 
-| Método | Ruta | Descripción |
+| Method | Route | Description |
 |--------|------|-------------|
-| POST   | `/auth/login` | Login – devuelve `{ accessToken, user }` |
-| GET    | `/auth/me` | Usuario autenticado |
-| GET    | `/transactions` | Lista paginada con filtros |
-| POST   | `/transactions` | Crear transacción |
-| PUT    | `/transactions/:id` | Actualizar |
-| DELETE | `/transactions/:id` | Eliminar |
-| GET    | `/transactions/summary` | Totales del período |
-| GET    | `/categories` | Lista de categorías |
-| POST   | `/categories` | Crear categoría |
-| PUT    | `/categories/:id` | Actualizar |
-| DELETE | `/categories/:id` | Eliminar |
-| GET    | `/reports/summary` | Resumen del reporte |
-| GET    | `/reports/monthly` | Datos mensuales |
-| GET    | `/reports/by-category` | Desglose por categoría |
-| GET    | `/reports/export` | Devuelve blob .xlsx |
+| POST | `/auth/login/` | Login y tokens JWT |
+| GET/PATCH | `/auth/me/` | Usuario autenticado |
+| POST | `/auth/refresh/` | Renovar access token |
+| POST | `/auth/logout/` | Invalidar refresh token |
+| GET/POST | `/categories/` | List or create categories |
+| GET/PUT/DELETE | `/categories/:id/` | Manage a category |
+| GET/POST | `/transactions/` | List or create transactions |
+| GET/PUT/DELETE | `/transactions/:id/` | Manage a transaction |
 
-### Formato de respuesta esperado (JSON)
+### Expected JSON Response Format
 
 ```json
 // Respuesta simple
@@ -75,24 +68,42 @@ La app espera una API REST en `http://localhost:8000/api/v1` (configurable en `s
 
 ---
 
-## Instalación y arranque
+## Installation And Start
 
 ```bash
-# Instalar dependencias
+# Install dependencies
 npm install
 
-# Servidor de desarrollo
+# Development server
 npm start
 
-# Build producción
+# Production build
 npm run build
 ```
 
+## Tests y cobertura
+
+```bash
+npm test -- --watch=false --browsers=ChromeHeadless --code-coverage
+```
+
+The report is generated at `coverage/finance-app/index.html`. The suite covers HTTP services, authentication, guards, interceptors, reports, Excel export, pipes, and reusable components.
+
+## Docker
+
+From the repository root:
+
+```bash
+docker compose up -d --build
+```
+
+The frontend is published at `http://localhost`, and Nginx serves the production build.
+
 ---
 
-## Seguridad
+## Security
 
-- El Bearer token se almacena en `sessionStorage` (se limpia al cerrar pestaña).
-- Para mayor seguridad en producción, usar **HttpOnly cookies** en el backend Python y deshabilitar el almacenamiento del token en el frontend.
-- El `AuthInterceptor` intercepta 401 y cierra sesión automáticamente.
-- El `ErrorInterceptor` muestra mensajes de error amigables via MatSnackBar.
+- The Bearer token is stored in `sessionStorage` (which is cleared when the tab is closed).
+- For stronger production security, use **HttpOnly cookies** in the Python backend and disable token storage in the frontend.
+- `AuthInterceptor` intercepts 401 responses and logs the user out automatically.
+- `ErrorInterceptor` displays friendly error messages through MatSnackBar.
