@@ -78,3 +78,7 @@ npm run build
 ## Environment Variables
 
 For development, Docker reads `SECRET_KEY` from `.env`; if it is missing, a local development key is used. In production, configure a secure key, allowed hosts, CORS origins, and credentials outside the repository.
+
+## License
+
+MIT License. See [LICENSE](LICENSE) for details.
